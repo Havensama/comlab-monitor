@@ -24,6 +24,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource><directory>src/main/resources</directory></resource>
+            <!-- schema.sql is bundled so the Admin app can create the database by itself -->
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes><include>schema.sql</include></includes>
+            </resource>
+        </resources>
         <finalName>comlab</finalName>
         <plugins>
             <!-- Builds ONE runnable jar (target/comlab.jar) with everything inside -->

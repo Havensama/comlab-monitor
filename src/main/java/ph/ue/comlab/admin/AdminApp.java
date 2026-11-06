@@ -56,12 +56,19 @@ public class AdminApp {
         UI.sizeWindow(frame);
         frame.setVisible(true);
         login.focusFirst();
-        new SwingWorker<Boolean, Void>() {
-            @Override protected Boolean doInBackground() { return Database.ping(); }
+        // Starts XAMPP's MySQL and creates the database if needed, so opening this app is all it takes.
+        new SwingWorker<String, String>() {
+            @Override protected String doInBackground() {
+                String problem = ph.ue.comlab.db.LocalServer.prepare(this::publish);
+                if (problem == null && !Database.ping())
+                    problem = "Can't reach the database at " + ph.ue.comlab.AppConfig.get("db.host", "localhost") + ".";
+                return problem;
+            }
+            @Override protected void process(java.util.List<String> chunks) {
+                login.setServerProblem(chunks.get(chunks.size() - 1));
+            }
             @Override protected void done() {
-                try {
-                    if (!get()) login.setServerProblem("Can't reach MySQL on this laptop. Start MySQL (XAMPP Control Panel) and run schema.sql once.");
-                } catch (Exception ignored) {}
+                try { login.setServerProblem(get()); } catch (Exception ignored) {}
             }
         }.execute();
     }

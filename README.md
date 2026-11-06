@@ -185,3 +185,13 @@ With a cloud MySQL (e.g. Aiven's free plan) the admin laptop does not have to ru
 1. Create a free MySQL service on aiven.io and note its Host, Port, User (`avnadmin`) and Password.
 2. In MySQL Workbench, connect with those details (SSL: *Require*) and run **`schema-cloud.sql`**.
 3. In `config.properties` next to **both** .exe files set `db.host`, `db.port`, `db.user=avnadmin`, `db.pass` and `db.ssl=true`.
+
+## Admin app starts the database by itself
+
+On the admin laptop (`db.host=localhost` / `127.0.0.1`) the Admin app:
+1. starts XAMPP's MySQL in the background if it is not running (no XAMPP Control Panel needed),
+2. creates the `comlab` database from the bundled `schema.sql` on first run,
+3. makes sure the `labuser` account exists and may use `comlab`.
+
+XAMPP only has to be installed (default `C:\xampp`; otherwise set `xampp.dir=` in config.properties).
+If MySQL's root account has a password, add `db.rootPass=` to config.properties.
