@@ -166,3 +166,14 @@ Open `.drawio` files at [app.diagrams.net](https://app.diagrams.net) and `.puml`
 ## Screen size
 
 Every window opens at **1920×1080** (maximized) and is drawn at real screen pixels, so the layout looks the same on every laptop regardless of Windows display scaling. To make everything larger, add `ui.scale=1.25` to `config.properties`.
+
+## Windows apps (.exe)
+
+Build **ComLab Student.exe** and **ComLab Admin.exe** (Java bundled inside, so target PCs don't need Java):
+
+1. IntelliJ: **Maven** panel, then **comlab-monitor → Lifecycle → package** (creates `target\comlab.jar`).
+2. Double-click **`scripts\build-app.bat`**. It creates:
+   - `dist\ComLab Student\` — copy to the student laptop / lab PCs
+   - `dist\ComLab Admin\` — copy to the admin laptop
+3. Edit `config.properties` **next to the .exe** (e.g. `db.host` on the student laptop).
+4. Student laptop kiosk: in the `ComLab Student` folder run `install-autostart.bat` (it uses `start-student.bat`, which keeps the .exe running).

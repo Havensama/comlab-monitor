@@ -25,6 +25,12 @@ public final class AppConfig {
     }
 
     private static Path locate() {
+        // Packaged app (ComLab Student.exe / ComLab Admin.exe): config.properties sits next to the .exe
+        String exe = System.getProperty("jpackage.app-path");
+        if (exe != null) {
+            Path p = Paths.get(exe).toAbsolutePath().getParent().resolve("config.properties");
+            if (Files.exists(p)) return p;
+        }
         Path cwd = Paths.get("config.properties").toAbsolutePath();
         if (Files.exists(cwd)) return cwd;
         try {
