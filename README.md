@@ -177,3 +177,11 @@ Build **ComLab Student.exe** and **ComLab Admin.exe** (Java bundled inside, so t
    - `dist\ComLab Admin\` — copy to the admin laptop
 3. Edit `config.properties` **next to the .exe** (e.g. `db.host` on the student laptop).
 4. Student laptop kiosk: in the `ComLab Student` folder run `install-autostart.bat` (it uses `start-student.bat`, which keeps the .exe running).
+
+## Cloud database (optional, instead of XAMPP)
+
+With a cloud MySQL (e.g. Aiven's free plan) the admin laptop does not have to run XAMPP; both apps only need internet.
+
+1. Create a free MySQL service on aiven.io and note its Host, Port, User (`avnadmin`) and Password.
+2. In MySQL Workbench, connect with those details (SSL: *Require*) and run **`schema-cloud.sql`**.
+3. In `config.properties` next to **both** .exe files set `db.host`, `db.port`, `db.user=avnadmin`, `db.pass` and `db.ssl=true`.
