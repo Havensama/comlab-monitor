@@ -64,7 +64,7 @@ copy /y "scripts\admin-open-firewall.bat" "%A%\" >nul
 copy /y "schema.sql" "%A%\" >nul
 
 echo.
-echo Done!
+echo Done.
 echo   %CD%\%S%\ComLab Student.exe
 echo   %CD%\%A%\ComLab Admin.exe
 echo Copy each folder to its laptop and edit config.properties next to the .exe.
