@@ -1,0 +1,80 @@
+@startuml
+' UE CompLab Monitoring System - activity diagram (landscape layout)
+' Same flow as the original; split into 4 columns joined by connectors A, B, C.
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam ArrowColor #222222
+skinparam ActivityBorderColor #222222
+skinparam ActivityBackgroundColor white
+skinparam ActivityDiamondBorderColor #222222
+skinparam ActivityDiamondBackgroundColor white
+skinparam ActivityStartColor #222222
+skinparam ActivityEndColor #222222
+skinparam ActivityBarColor #222222
+skinparam CircledCharacterFontSize 12
+skinparam CircledCharacterRadius 11
+
+split
+  -[hidden]->
+  ' ---------- Column 1: startup ----------
+  start
+  :PC Power On / System Startup;
+  if (Is Lab Open?\n7:00 AM - 9:00 PM) then (No)
+    :Display 'Lab Closed' Overlay;
+    :Shutdown PC;
+    stop
+  else (Yes)
+    :Launch Comlab Lock Screen Application;
+    (A)
+    detach
+  endif
+
+split again
+  -[hidden]->
+  ' ---------- Column 2: login ----------
+  (A)
+  repeat
+    :Input Student ID & Password;
+    if (Validate Credentials?) then (Valid Credentials)
+      break
+    else (Invalid / Incorrect)
+      :Display 'Invalid Credentials' Error;
+    endif
+  repeat while (Retry Login)
+  :Authenticate Student & Unlock Desktop;
+  :Log Session Start Time & Workstation ID Automatically;
+  (B)
+  detach
+
+split again
+  -[hidden]->
+  ' ---------- Column 3: active session ----------
+  (B)
+  repeat
+    :Desktop Unlocked: Open Active Session
+    (Unlimited Duration / No Time Limit);
+    if (User Action / Event?) then (Report Technical Issue)
+      :Submit Issue Ticket via App/Tray;
+    else (Student Logs Out / Ends Session)
+      break
+    endif
+  repeat while (Active Session)
+  (C)
+  detach
+
+split again
+  -[hidden]->
+  ' ---------- Column 4: end of session ----------
+  (C)
+  :Capture Session End Time Automatically;
+  :Calculate Session Duration & Save Log to Database;
+  :Display Shutdown / Session Ended Prompt;
+  if (User Choice or Inactivity?) then (User Clicks Shutdown)
+    :System Shutdown;
+  else (Idle > 5 Minutes)
+    :System Shutdown;
+  endif
+  stop
+end split
+@enduml
