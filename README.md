@@ -162,3 +162,7 @@ Open `.drawio` files at [app.diagrams.net](https://app.diagrams.net) and `.puml`
 - Dela Cruz, Justin — Project Manager, Developer
 - Gaspi, Jay Lord F. — UI/UX Designer, Developer
 - Timbol, Alexandria T. — UI/UX Designer, Documentation
+
+## Screen size
+
+Every window opens at **1920×1080** (maximized) and is drawn at real screen pixels, so the layout looks the same on every laptop regardless of Windows display scaling. To make everything larger, add `ui.scale=1.25` to `config.properties`.

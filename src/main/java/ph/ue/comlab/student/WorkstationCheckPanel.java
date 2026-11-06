@@ -32,13 +32,10 @@ public class WorkstationCheckPanel extends JPanel {
             "Cursor moves smoothly, both clicks and scroll work");
     private final JLabel progressText = UI.label("", Theme.inter(W.SEMIBOLD, 13), Theme.TEXT_2);
     private final Progress progress = new Progress();
-    private final ConcernForm concern = new ConcernForm("Other concerns", true,
-            "Something else not working? Tell us and a lab assistant will check it.");
     private final UI.Banner banner = new UI.Banner();
     private final UI.Pill timerChip = TopNav.chip("Session  00:00:00", null).dot(Theme.SUCCESS_DOT);
     private final JPanel reportsList = Flex.column(14).align(Flex.Align.STRETCH).build();
     private final UI.PrimaryButton startBtn = new UI.PrimaryButton("Start session", "arrow-right");
-    private final UI.SecondaryButton submitBtn = new UI.SecondaryButton("Submit report", "send");
     private final Timer ticker;
     private final long startedAtMillis;
     private final long elapsedAtLoad;
@@ -76,13 +73,13 @@ public class WorkstationCheckPanel extends JPanel {
         for (EquipmentCard c : new EquipmentCard[]{monitor, keyboard, mouse}) c.onChange(this::updateProgress);
         updateProgress();
 
-        submitBtn.addActionListener(e -> onSubmit());
         startBtn.addActionListener(e -> onStart());
         JPanel actions = Flex.row(12).justify(Flex.Justify.BETWEEN).align(Flex.Align.CENTER).build(
-                UI.label("You can also report issues anytime during your session.", Theme.inter(W.REGULAR, 13), Theme.MUTED),
-                Flex.row(12).align(Flex.Align.START).build(submitBtn, startBtn));
+                UI.label("Unticked items are reported automatically. Use Report issue on the session bar for anything else.",
+                        Theme.inter(W.REGULAR, 13), Theme.MUTED),
+                startBtn);
 
-        JPanel checkColumn = Flex.column(24).align(Flex.Align.STRETCH).build(header, banner, equipment, concern, actions);
+        JPanel checkColumn = Flex.column(24).align(Flex.Align.STRETCH).build(header, banner, equipment, actions);
 
         // ---------------- side panel ----------------
         JPanel side = UI.fixedColumn(360, 16,
@@ -115,21 +112,7 @@ public class WorkstationCheckPanel extends JPanel {
     }
 
     // ---------------- actions ----------------
-    private void onSubmit() {
-        String problem = concern.validateInput();
-        if (problem != null) { banner.error(problem); return; }
-        banner.clear();
-        setBusy(true);
-        if (listener != null) listener.submitConcern(concern.value());
-    }
-
     private void onStart() {
-        ConcernForm.Concern c = null;
-        if (!concern.isBlank()) {
-            String problem = concern.validateInput();
-            if (problem != null) { banner.error(problem + " (or clear the Other concerns form)"); return; }
-            c = concern.value();
-        }
         int unchecked = (monitor.isChecked() ? 0 : 1) + (keyboard.isChecked() ? 0 : 1) + (mouse.isChecked() ? 0 : 1);
         if (unchecked > 0) {
             int ans = JOptionPane.showConfirmDialog(this,
@@ -139,18 +122,16 @@ public class WorkstationCheckPanel extends JPanel {
         }
         banner.clear();
         setBusy(true);
-        if (listener != null) listener.startSession(monitor.isChecked(), keyboard.isChecked(), mouse.isChecked(), c);
+        if (listener != null) listener.startSession(monitor.isChecked(), keyboard.isChecked(), mouse.isChecked(), null);
     }
 
     public void setBusy(boolean busy) {
         startBtn.setEnabled(!busy);
-        submitBtn.setEnabled(!busy);
         setCursor(busy ? Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) : null);
     }
 
     public void concernSent(List<Report> recent) {
         setBusy(false);
-        concern.clear();
         banner.success("Report sent. A lab assistant will check it soon — thank you!");
         setRecentReports(recent);
     }

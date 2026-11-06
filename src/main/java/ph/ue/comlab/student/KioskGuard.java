@@ -105,8 +105,7 @@ public class KioskGuard {
             frame.setBounds(screenBounds());
             frame.setAlwaysOnTop(true);
         } else {
-            frame.setSize(1440, 900);
-            frame.setLocationRelativeTo(null);
+            ph.ue.comlab.ui.UI.sizeWindow(frame);
         }
         frame.setVisible(true);
         frame.toFront();

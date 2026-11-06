@@ -839,4 +839,14 @@ public final class UI {
         p.setOpaque(false);
         return Flex.column(gap).align(Flex.Align.STRETCH).into(p, kids);
     }
+
+    /** Every app window uses the same 1920x1080 design size: opened at 1920x1080 (or the screen, if smaller), then maximized. */
+    public static final int DESIGN_W = 1920, DESIGN_H = 1080;
+
+    public static void sizeWindow(java.awt.Frame frame) {
+        java.awt.Rectangle usable = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        frame.setSize(Math.min(DESIGN_W, usable.width), Math.min(DESIGN_H, usable.height));
+        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+    }
 }

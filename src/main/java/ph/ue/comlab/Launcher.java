@@ -15,6 +15,9 @@ import javax.swing.*;
 public class Launcher {
     public static void main(String[] args) {
         AppConfig.load();
+        // Draw at real screen pixels so every laptop shows the same 1920x1080 layout,
+        // whatever Windows display scaling (125%, 150%...) is set to. Change ui.scale in config.properties.
+        System.setProperty("sun.java2d.uiScale", AppConfig.get("ui.scale", "1"));
         String mode = args.length > 0 ? args[0] : AppConfig.get("app.mode", "student");
         Theme.init();
         if (mode.equalsIgnoreCase("admin")) Theme.useAdminTheme();

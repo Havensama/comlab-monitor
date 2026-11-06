@@ -53,9 +53,7 @@ public class AdminApp {
     }
 
     public void start() {
-        frame.setSize(1440, 900);
-        frame.setLocationRelativeTo(null);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        UI.sizeWindow(frame);
         frame.setVisible(true);
         login.focusFirst();
         new SwingWorker<Boolean, Void>() {
