@@ -204,7 +204,7 @@ public class AdminApp {
     private void pcClicked(PcStatus pc) {
         if (pc.currentStudentNo() == null) {
             String[] opts = {"See reports", "Close"};
-            int c = JOptionPane.showOptionDialog(frame, pc.pcId() + " · " + pc.location() + "\n"
+            int c = JOptionPane.showOptionDialog(frame, pc.pcId() + " · " + pc.lab() + "\n"
                             + (pc.online() ? "Online — waiting for a student." : "Offline — the student app is not running.")
                             + (pc.openReports() > 0 ? "\n" + pc.openReports() + " open issue(s)." : ""),
                     pc.pcId(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opts, opts[1]);

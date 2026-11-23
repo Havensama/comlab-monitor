@@ -84,14 +84,13 @@ public class SessionDao {
     }
 
     public void saveEquipmentCheck(int sessionId, boolean monitor, boolean keyboard, boolean mouse) throws SQLException {
-        String sql = "INSERT INTO equipment_checks (session_id, monitor_ok, keyboard_ok, mouse_ok) VALUES (?,?,?,?) "
-                + "ON DUPLICATE KEY UPDATE monitor_ok = VALUES(monitor_ok), keyboard_ok = VALUES(keyboard_ok), "
-                + "mouse_ok = VALUES(mouse_ok), checked_at = NOW()";
+        String sql = "UPDATE sessions SET monitor_ok = ?, keyboard_ok = ?, mouse_ok = ?, checked_at = NOW() "
+                + "WHERE session_id = ?";
         try (Connection c = Database.get(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, sessionId);
-            ps.setBoolean(2, monitor);
-            ps.setBoolean(3, keyboard);
-            ps.setBoolean(4, mouse);
+            ps.setBoolean(1, monitor);
+            ps.setBoolean(2, keyboard);
+            ps.setBoolean(3, mouse);
+            ps.setInt(4, sessionId);
             ps.executeUpdate();
         }
     }
@@ -100,9 +99,8 @@ public class SessionDao {
     public List<SessionRow> log(String search, boolean activeOnly, boolean todayOnly) throws SQLException {
         String sql = "SELECT s.session_id, s.student_no, st.full_name, s.pc_id, s.time_in, s.time_out, s.end_reason, "
                 + "TIMESTAMPDIFF(SECOND, s.time_in, COALESCE(s.time_out, NOW())) AS secs, "
-                + "e.monitor_ok, e.keyboard_ok, e.mouse_ok "
+                + "s.monitor_ok, s.keyboard_ok, s.mouse_ok "
                 + "FROM sessions s JOIN students st ON st.student_no = s.student_no "
-                + "LEFT JOIN equipment_checks e ON e.session_id = s.session_id "
                 + "WHERE (s.student_no LIKE ? OR st.full_name LIKE ? OR s.pc_id LIKE ?) "
                 + (activeOnly ? "AND s.time_out IS NULL " : "")
                 + (todayOnly ? "AND DATE(s.time_in) = CURDATE() " : "")

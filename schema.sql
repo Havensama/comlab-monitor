@@ -31,7 +31,7 @@ CREATE TABLE admins (
 -- ---------------------------------------------------------------------
 CREATE TABLE pcs (
     pc_id          VARCHAR(10)  PRIMARY KEY,
-    location       VARCHAR(60)  NOT NULL,
+    lab            VARCHAR(30)  NOT NULL DEFAULT 'Lab 1',
     last_seen      DATETIME     NULL
 );
 
@@ -45,22 +45,13 @@ CREATE TABLE sessions (
     time_in        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     time_out       DATETIME     NULL,
     end_reason     VARCHAR(20)  NULL,               -- LOGOUT / ADMIN / RECOVERED
+    monitor_ok     BOOLEAN      NULL,
+    keyboard_ok    BOOLEAN      NULL,
+    mouse_ok       BOOLEAN      NULL,
+    checked_at     DATETIME     NULL,
     FOREIGN KEY (student_no) REFERENCES students(student_no),
     FOREIGN KEY (pc_id)      REFERENCES pcs(pc_id),
     INDEX idx_open (pc_id, time_out)
-);
-
--- ---------------------------------------------------------------------
---  The "Workstation Check" screen (Monitor / Keyboard / Mouse)
--- ---------------------------------------------------------------------
-CREATE TABLE equipment_checks (
-    check_id       INT AUTO_INCREMENT PRIMARY KEY,
-    session_id     INT          NOT NULL UNIQUE,
-    monitor_ok     BOOLEAN      NOT NULL,
-    keyboard_ok    BOOLEAN      NOT NULL,
-    mouse_ok       BOOLEAN      NOT NULL,
-    checked_at     DATETIME     DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (session_id) REFERENCES sessions(session_id)
 );
 
 -- ---------------------------------------------------------------------
@@ -100,13 +91,13 @@ INSERT INTO students (student_no, full_name, course, password_hash) VALUES
  ('20221098765', 'Angela Reyes',     'BSCS',  SHA2('1234', 256)),
  ('20241001001', 'Mark Villanueva',  'BSIT',  SHA2('1234', 256));
 
-INSERT INTO pcs (pc_id, location) VALUES
- ('PC-01','Lab 6 · CoE Building'),('PC-02','Lab 6 · CoE Building'),('PC-03','Lab 6 · CoE Building'),
- ('PC-04','Lab 6 · CoE Building'),('PC-05','Lab 6 · CoE Building'),('PC-06','Lab 6 · CoE Building'),
- ('PC-07','Lab 6 · CoE Building'),('PC-08','Lab 6 · CoE Building'),('PC-09','Lab 6 · CoE Building'),
- ('PC-10','Lab 6 · CoE Building'),('PC-11','Lab 6 · CoE Building'),('PC-12','Lab 6 · CoE Building'),
- ('PC-13','Lab 6 · CoE Building'),('PC-14','Lab 6 · CoE Building'),('PC-15','Lab 6 · CoE Building'),
- ('PC-16','Lab 6 · CoE Building');
+INSERT INTO pcs (pc_id, lab) VALUES
+ ('PC-01','Lab 1'),('PC-02','Lab 1'),('PC-03','Lab 1'),
+ ('PC-04','Lab 1'),('PC-05','Lab 1'),('PC-06','Lab 1'),
+ ('PC-07','Lab 1'),('PC-08','Lab 1'),('PC-09','Lab 1'),
+ ('PC-10','Lab 1'),('PC-11','Lab 1'),('PC-12','Lab 1'),
+ ('PC-13','Lab 1'),('PC-14','Lab 1'),('PC-15','Lab 1'),
+ ('PC-16','Lab 1');
 
 -- a little history so the screens aren't empty
 INSERT INTO sessions (student_no, pc_id, time_in, time_out, end_reason) VALUES

@@ -138,7 +138,7 @@ class DashboardPage implements AdminUI.Page<DashboardPage.Data> {
                         Theme.DANGER, Theme.DANGER_SOFT, null)));
             }
             Flex.column(0).align(Flex.Align.STRETCH).pad(14).into(this, col);
-            setToolTipText(pc.pcId() + " · " + pc.location());
+            setToolTipText(pc.pcId() + " · " + pc.lab());
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             addMouseListener(new MouseAdapter() {
                 @Override public void mouseClicked(MouseEvent e) { onClick.accept(pc); }

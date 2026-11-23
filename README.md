@@ -134,7 +134,7 @@ src/main/java/ph/ue/comlab/
     └── StudentsPage.java    accounts
 ```
 
-Database tables (for the ERD): `students`, `admins`, `pcs`, `sessions`, `equipment_checks`, `reports`. See `schema.sql`.
+Database tables (for the ERD): `students`, `admins`, `pcs`, `sessions`, `reports`. See `schema.sql`.
 
 ## 9. Customizing
 

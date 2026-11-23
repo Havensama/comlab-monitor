@@ -14,12 +14,12 @@ public class PcDao {
     public static final int ONLINE_WINDOW_SECONDS = 30;
 
     /** Called by the student app on startup and every 10 seconds. Creates the PC row if it's new. */
-    public void heartbeat(String pcId, String location) throws SQLException {
-        String sql = "INSERT INTO pcs (pc_id, location, last_seen) VALUES (?, ?, NOW()) "
-                + "ON DUPLICATE KEY UPDATE last_seen = NOW(), location = VALUES(location)";
+    public void heartbeat(String pcId, String lab) throws SQLException {
+        String sql = "INSERT INTO pcs (pc_id, lab, last_seen) VALUES (?, ?, NOW()) "
+                + "ON DUPLICATE KEY UPDATE last_seen = NOW(), lab = VALUES(lab)";
         try (Connection c = Database.get(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setString(1, pcId);
-            ps.setString(2, location);
+            ps.setString(2, lab);
             ps.executeUpdate();
         }
     }
@@ -34,7 +34,7 @@ public class PcDao {
     }
 
     public List<PcStatus> all() throws SQLException {
-        String sql = "SELECT p.pc_id, p.location, "
+        String sql = "SELECT p.pc_id, p.lab, "
                 + "(p.last_seen IS NOT NULL AND p.last_seen > NOW() - INTERVAL " + ONLINE_WINDOW_SECONDS + " SECOND) AS online, "
                 + "s.student_no, st.full_name, s.time_in, TIMESTAMPDIFF(SECOND, s.time_in, NOW()) AS secs, "
                 + "(SELECT COUNT(*) FROM reports r WHERE r.pc_id = p.pc_id AND r.status <> 'RESOLVED') AS open_reports "
@@ -45,7 +45,7 @@ public class PcDao {
         List<PcStatus> out = new ArrayList<>();
         try (Connection c = Database.get(); Statement st = c.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                out.add(new PcStatus(rs.getString("pc_id"), rs.getString("location"), rs.getBoolean("online"),
+                out.add(new PcStatus(rs.getString("pc_id"), rs.getString("lab"), rs.getBoolean("online"),
                         rs.getString("student_no"), rs.getString("full_name"), Database.dt(rs, "time_in"),
                         rs.getLong("secs"), rs.getInt("open_reports")));
             }

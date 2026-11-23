@@ -39,7 +39,7 @@ public final class Models {
     }
 
     /** pcs table + who is currently using it */
-    public record PcStatus(String pcId, String location, boolean online, String currentStudentNo,
+    public record PcStatus(String pcId, String lab, boolean online, String currentStudentNo,
                            String currentStudentName, LocalDateTime sessionStart, long sessionSeconds,
                            int openReports) {}
 

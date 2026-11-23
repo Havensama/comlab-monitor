@@ -36,7 +36,7 @@ public class StudentApp {
     private final PcDao pcs = new PcDao();
 
     private final String pcId = AppConfig.pcId();
-    private final String pcLocation = AppConfig.pcLocation();
+    private final String pcLab = AppConfig.pcLab();
 
     private final JFrame frame = new JFrame("UE CompLab");
     private final CardLayout cards = new CardLayout();
@@ -77,7 +77,7 @@ public class StudentApp {
     // =====================================================================
     private void heartbeat() {
         try {
-            pcs.heartbeat(pcId, pcLocation);
+            pcs.heartbeat(pcId, pcLab);
             Integer pending = pendingLogoutId;
             if (pending != null) { sessions.end(pending, "LOGOUT"); pendingLogoutId = null; }
             Integer id = activeSessionId;
@@ -108,7 +108,7 @@ public class StudentApp {
                 Optional<String> other = sessions.activeElsewhere(id, pcId);
                 if (other.isPresent())
                     return new Object[]{"You're still logged in on " + other.get() + ". Please log out there first."};
-                pcs.heartbeat(pcId, pcLocation);
+                pcs.heartbeat(pcId, pcLab);
                 LabSession ls = sessions.start(id, pcId);
                 List<Report> recent = reports.recentForPc(pcId, 3);
                 return new Object[]{null, s.get(), ls, recent};

@@ -60,7 +60,7 @@ public final class AppConfig {
 
                 # ---- This workstation (student laptop only) ----
                 pc.id=PC-14
-                pc.location=Lab 6 · CoE Building
+                pc.lab=Lab 1
                 lab.hours=7:00 AM – 9:00 PM
 
                 # Secret exit for the kiosk: press Ctrl+Shift+F12, then type this password
@@ -79,5 +79,5 @@ public final class AppConfig {
     public static Path file() { return file; }
 
     public static String pcId()       { return get("pc.id", "PC-01"); }
-    public static String pcLocation() { return get("pc.location", "Computer Laboratory"); }
+    public static String pcLab() { return get("pc.lab", "Lab 1"); }
 }

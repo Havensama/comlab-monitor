@@ -47,12 +47,11 @@ public class WorkstationCheckPanel extends JPanel {
         this.elapsedAtLoad = session.elapsedSecondsAtLoad();
         this.startedAtMillis = System.currentTimeMillis();
         String pc = AppConfig.pcId();
-        String loc = AppConfig.pcLocation();
-        String shortLoc = loc.contains("·") ? loc.substring(0, loc.indexOf('·')).trim() : loc;
+        String lab = AppConfig.pcLab();
 
         // ---------------- top nav ----------------
         JPanel right = Flex.row(12).align(Flex.Align.CENTER).build(
-                TopNav.chip(pc + " · " + shortLoc, "monitor"),
+                TopNav.chip(pc + " · " + lab, "monitor"),
                 timerChip,
                 UI.vDivider(28),
                 TopNav.user(student.initials(), student.fullName(), student.studentNo()),
@@ -83,7 +82,7 @@ public class WorkstationCheckPanel extends JPanel {
 
         // ---------------- side panel ----------------
         JPanel side = UI.fixedColumn(360, 16,
-                sessionCard(pc, loc, session),
+                sessionCard(pc, lab, session),
                 recentCard(pc),
                 helpTip());
         setRecentReports(recent);
@@ -142,12 +141,12 @@ public class WorkstationCheckPanel extends JPanel {
     }
 
     // ---------------- side cards ----------------
-    private JComponent sessionCard(String pc, String loc, LabSession s) {
+    private JComponent sessionCard(String pc, String lab, LabSession s) {
         UI.Card card = new UI.Card(Theme.PAGE, 16, Theme.BORDER);
         Flex.column(16).align(Flex.Align.STRETCH).pad(20).into(card,
                 UI.label("Your session", Theme.poppins(W.SEMIBOLD, 16), Theme.TEXT),
                 kv("Workstation", pc),
-                kv("Location", loc),
+                kv("Lab", lab),
                 kv("Logged in", s.timeIn() == null ? "—" : s.timeIn().format(Models.TIME)),
                 Flex.row(0).justify(Flex.Justify.BETWEEN).align(Flex.Align.CENTER).build(
                         UI.label("Status", Theme.inter(W.REGULAR, 14), Theme.TEXT_2),
