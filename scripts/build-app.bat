@@ -21,8 +21,9 @@ rem ---- find jpackage (comes with JDK 17+) ----
 set "JP="
 for /f "delims=" %%P in ('where jpackage 2^>nul') do if not defined JP set "JP=%%P"
 if not defined JP if defined JAVA_HOME if exist "%JAVA_HOME%\bin\jpackage.exe" set "JP=%JAVA_HOME%\bin\jpackage.exe"
-if not defined JP for /d %%D in ("%USERPROFILE%\.jdks\*") do if exist "%%D\bin\jpackage.exe" set "JP=%%D\bin\jpackage.exe"
-if not defined JP for /d %%D in ("%ProgramFiles%\Java\*" "%ProgramFiles%\Eclipse Adoptium\*" "%ProgramFiles%\Microsoft\*") do if exist "%%D\bin\jpackage.exe" set "JP=%%D\bin\jpackage.exe"
+rem  (a JDK only counts if java.exe is there too - skips half-downloaded JDK folders)
+if not defined JP for /d %%D in ("%USERPROFILE%\.jdks\*") do if exist "%%D\bin\jpackage.exe" if exist "%%D\bin\java.exe" set "JP=%%D\bin\jpackage.exe"
+if not defined JP for /d %%D in ("%ProgramFiles%\Java\*" "%ProgramFiles%\Eclipse Adoptium\*" "%ProgramFiles%\Microsoft\*") do if exist "%%D\bin\jpackage.exe" if exist "%%D\bin\java.exe" set "JP=%%D\bin\jpackage.exe"
 if not defined JP (
   echo [!] jpackage was not found. Install a JDK 17 or newer, or set JAVA_HOME.
   pause & exit /b 1
